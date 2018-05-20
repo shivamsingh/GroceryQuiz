@@ -5,6 +5,7 @@ import android.support.v7.widget.Toolbar
 import butterknife.BindView
 import com.shivamsingh.groceryquiz.R
 import com.shivamsingh.groceryquiz.ui.base.BaseActivity
+import com.shivamsingh.groceryquiz.ui.quiz.QuizFragment
 
 class MainActivity : BaseActivity() {
     @BindView(R.id.toolbar)
@@ -14,5 +15,6 @@ class MainActivity : BaseActivity() {
 
     override fun afterViews(savedInstanceState: Bundle?) {
         setSupportActionBar(toolbar)
+        setScreen(R.id.frame, QuizFragment.instance())
     }
 }

@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="white">#FFFFFF</color>
+    <color name="selection">#3366ff</color>
+    <color name="success">#008577</color>
+    <color name="error">#cc3300</color>
 </resources>
