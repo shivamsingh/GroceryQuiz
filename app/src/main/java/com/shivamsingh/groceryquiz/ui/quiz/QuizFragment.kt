@@ -133,13 +133,13 @@ class QuizFragment : BaseFragment<QuizView, QuizPresenter>(), QuizView {
         message.text = ""
         message.setTextColor(resources.getColor(R.color.success))
 
-        if (isTimeRemainingToAnswer(viewModel.startTime))
-            scheduleTimeOut(viewModel.startTime)
+        if (isTimeRemainingToAnswer(viewModel.quiz.totalTimeToAnswerInSeconds, viewModel.startTime))
+            scheduleTimeOut(viewModel.quiz.totalTimeToAnswerInSeconds, viewModel.startTime)
     }
 
-    private fun isTimeRemainingToAnswer(quizStartTime: Long): Boolean {
+    private fun isTimeRemainingToAnswer(totalTime: Int, quizStartTime: Long): Boolean {
         val elapsedTimeInSeconds = (Calendar.getInstance().timeInMillis - quizStartTime) / 1000
-        return elapsedTimeInSeconds < QUIZ_TIMEOUT_IN_SECONDS
+        return elapsedTimeInSeconds < totalTime
     }
 
     private fun showQuizAnswered(viewModel: QuizViewModel) {
@@ -199,12 +199,12 @@ class QuizFragment : BaseFragment<QuizView, QuizPresenter>(), QuizView {
         option4.setBackgroundColor(Color.TRANSPARENT)
     }
 
-    private fun scheduleTimeOut(quizStartTime: Long) {
+    private fun scheduleTimeOut(totalTime: Int, quizStartTime: Long) {
         val elapsedTimeInSeconds = (Calendar.getInstance().timeInMillis - quizStartTime) / 1000
         disposeTimeoutSubscription()
         timeoutSubscription = Observable.interval(1, TimeUnit.SECONDS)
-                .take(QUIZ_TIMEOUT_IN_SECONDS - elapsedTimeInSeconds + 1)
-                .map { remainingTime(it, elapsedTimeInSeconds) }
+                .take(totalTime - elapsedTimeInSeconds + 1)
+                .map { remainingTime(totalTime, it, elapsedTimeInSeconds) }
                 .doOnComplete { timedOutSubject.onNext(true) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { showRemainingTime(it) }
@@ -215,8 +215,8 @@ class QuizFragment : BaseFragment<QuizView, QuizPresenter>(), QuizView {
             timeoutSubscription!!.dispose()
     }
 
-    private fun remainingTime(secondsElapsedAfterTimerStarted: Long, quizElapsedTimeInSeconds: Long) =
-            QUIZ_TIMEOUT_IN_SECONDS - secondsElapsedAfterTimerStarted - quizElapsedTimeInSeconds
+    private fun remainingTime(totalTime: Int, secondsElapsedAfterTimerStarted: Long, quizElapsedTimeInSeconds: Long) =
+            totalTime - secondsElapsedAfterTimerStarted - quizElapsedTimeInSeconds
 
     private fun showRemainingTime(it: Long) {
         if (isAdded)
@@ -224,8 +224,6 @@ class QuizFragment : BaseFragment<QuizView, QuizPresenter>(), QuizView {
     }
 
     companion object {
-        const val QUIZ_TIMEOUT_IN_SECONDS = 30
-
         fun instance() = QuizFragment()
     }
 }

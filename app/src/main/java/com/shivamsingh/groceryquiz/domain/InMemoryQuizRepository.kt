@@ -33,7 +33,7 @@ class InMemoryQuizRepository(val store: DictionaryStore, val quizDatabase: QuizD
     override fun timedOutActiveQuiz(): Observable<Boolean> {
         return activeQuiz()
                 .filter { it.question != store.retrieveValue(LAST_ANSWERED_QUIZ_KEY) }
-                .filter { isActiveQuizTimedOut() }
+                .filter { isActiveQuizTimedOut(it) }
                 .map { true }
     }
 
@@ -79,18 +79,14 @@ class InMemoryQuizRepository(val store: DictionaryStore, val quizDatabase: QuizD
         store.storeValue(IS_LAST_ANSWERED_QUIZ_OPTION_CORRECT, answeredOption.isCorrect)
     }
 
-    private fun isActiveQuizTimedOut() =
-            (Calendar.getInstance().timeInMillis - store.retrieveLong(ACTIVE_QUIZ_KEY_START_TIME)) / 1000 >= QUIZ_TIMEOUT_IN_SECONDS
+    private fun isActiveQuizTimedOut(it: QuizModel) =
+            (Calendar.getInstance().timeInMillis - store.retrieveLong(ACTIVE_QUIZ_KEY_START_TIME)) / 1000 >= it.timeoutInSeconds
 
     private fun toShuffledOptions(quizModel: QuizModel) =
             quizModel.copy(options = quizModel.options.shuffled())
 
     private fun toQuiz(it: QuizModel) =
-            Quiz(it.question, it.options[0].option, it.options[1].option, it.options[2].option, it.options[3].option)
+            Quiz(it.question, it.options[0].option, it.options[1].option, it.options[2].option, it.options[3].option, it.timeoutInSeconds)
 
     private fun toAnsweredOption(answer: String) = AnsweredOption(answer, activeQuiz!!.correctOption.option == answer)
-
-    companion object {
-        const val QUIZ_TIMEOUT_IN_SECONDS = 30
-    }
 }

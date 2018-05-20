@@ -29,9 +29,20 @@ class InMemoryQuizDatabase(val context: Context) : QuizDatabase {
             (GsonBuilder().create().fromJson(quizesJson, LinkedHashMap::class.java) as LinkedHashMap<String, ArrayList<String>>)
 
     private fun toQuizModel(it: Map.Entry<String, ArrayList<String>>): QuizModel {
-        return QuizModel(it.key, listOf(QuizOptionModel(it.value[0]),
+        return QuizModel(it.key, options(it), correctOption(it), QUIZ_TIMEOUT_IN_SECONDS)
+    }
+
+    private fun correctOption(it: Map.Entry<String, ArrayList<String>>) =
+            QuizOptionModel(it.value[0])
+
+    private fun options(it: Map.Entry<String, ArrayList<String>>): List<QuizOptionModel> {
+        return listOf(QuizOptionModel(it.value[0]),
                 QuizOptionModel(it.value[1]),
                 QuizOptionModel(it.value[2]),
-                QuizOptionModel(it.value[3])), QuizOptionModel(it.value[0]))
+                QuizOptionModel(it.value[3]))
+    }
+
+    companion object {
+        const val QUIZ_TIMEOUT_IN_SECONDS = 30
     }
 }
