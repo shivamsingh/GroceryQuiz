@@ -14,7 +14,7 @@ object QuizViewModelReducer {
         if (partialChange is AnswerSubmitted)
             return oldModel.copy(state = QuizViewState.ANSWERED, answeredOption = partialChange.answeredOption)
         if (partialChange is RetakeQuiz)
-            return oldModel.copy(state = QuizViewState.ACTIVE, quiz = partialChange.quiz)
+            return oldModel.copy(state = QuizViewState.ACTIVE, quiz = partialChange.quiz, startTime = partialChange.startTime)
         if (partialChange is TimedOut)
             return oldModel.copy(state = QuizViewState.TIMED_OUT)
         return oldModel;

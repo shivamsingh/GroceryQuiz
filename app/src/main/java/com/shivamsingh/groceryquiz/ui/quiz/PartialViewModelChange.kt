@@ -16,6 +16,6 @@ class TimedOut : PartialViewModelChange()
 
 class NextQuiz(val quiz: Quiz, val startTime: Long = currentTimeInMillis()) : PartialViewModelChange()
 
-data class RetakeQuiz(val quiz: Quiz) : PartialViewModelChange()
+data class RetakeQuiz(val quiz: Quiz, val startTime: Long = currentTimeInMillis()) : PartialViewModelChange()
 
 private fun currentTimeInMillis() = Calendar.getInstance().timeInMillis

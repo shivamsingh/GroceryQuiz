@@ -23,7 +23,7 @@ class QuizPresenter(val quizRepository: QuizRepository) : MviBasePresenter<QuizV
 
         val retakeQuiz = intent(QuizView::retakeQuizIntent)
                 .flatMap { ignored -> quizRepository.retake() }
-                .map { NextQuiz(it) }
+                .map { RetakeQuiz(it) }
 
         val allIntentsObservable =
                 Observable.merge(submitQuiz, nextQuiz, retakeQuiz, timedOut)
