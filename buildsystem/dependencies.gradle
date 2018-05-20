@@ -1,0 +1,103 @@
+ext {
+
+    // Libraries
+    kotlin = '1.2.41'
+    rxJava2 = '2.1.9'
+    rxKotlin = '2.2.0'
+    rxAndroid = '2.0.1'
+    rxBinding = '2.1.1'
+    archComponents = '1.0.0'
+    supportLibrary = '26.1.0'
+    constraintLayout = '1.1.0-beta5'
+    dagger2 = '2.11'
+    butterKnife = '8.8.1'
+    javaxAnnotation = '10.0-b28'
+    okHttp = '3.8.0'
+    retrofit2 = '2.3.0'
+    gson = '2.8.1'
+    timber = '4.6.1'
+    recyclerDivider = '1.4.0'
+    picasso = '2.71828'
+    mosby3 = '3.1.0'
+
+    // Instrumentation
+    stetho = '1.5.0'
+    chuck = '1.0.4'
+    leakCanary = '1.5.1'
+
+    // Testing
+    junit = '4.12'
+    mockito = '2.8.9'
+    mockitoKotlin = '1.5.0'
+    assertJ = '3.8.0'
+
+    commonDependencies = [
+            kotlin                      : "org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlin}",
+            kotlinReflection            : "org.jetbrains.kotlin:kotlin-reflect:${kotlin}",
+            rxJava2                     : "io.reactivex.rxjava2:rxjava:${rxJava2}",
+            rxKotlin                    : "io.reactivex.rxjava2:rxkotlin:${rxKotlin}",
+            rxAndroid                   : "io.reactivex.rxjava2:rxandroid:${rxAndroid}",
+
+            rxbinding                   : "com.jakewharton.rxbinding2:rxbinding:${rxBinding}",
+            rxbindingSupportV4          : "com.jakewharton.rxbinding2:rxbinding-support-v4:${rxBinding}",
+            rxbindingAppcompatV7        : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${rxBinding}",
+            rxbindingDesign             : "com.jakewharton.rxbinding2:rxbinding-design:${rxBinding}",
+            rxbindingRecyclerviewV7     : "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:${rxBinding}",
+
+            supportAppCompatV7          : "com.android.support:appcompat-v7:${supportLibrary}",
+            supportDesign               : "com.android.support:design:${supportLibrary}",
+            supportV13                  : "com.android.support:support-v13:${supportLibrary}",
+            supportAnnotation           : "com.android.support:support-annotations:${supportLibrary}",
+            supportCardView             : "com.android.support:cardview-v7:${supportLibrary}",
+            supportRecyclerView         : "com.android.support:recyclerview-v7:${supportLibrary}",
+            constraintLayout            : "com.android.support.constraint:constraint-layout:${constraintLayout}",
+
+            dagger2Compiler             : "com.google.dagger:dagger-compiler:${dagger2}",
+            dagger2                     : "com.google.dagger:dagger:${dagger2}",
+            dagger2Android              : "com.google.dagger:dagger-android-support:${dagger2}",
+            dagger2AndroidCompiler      : "com.google.dagger:dagger-android-processor:${dagger2}",
+            javaxAnnotation             : "org.glassfish:javax.annotation:${javaxAnnotation}",
+
+            butterKnifeCompiler         : "com.jakewharton:butterknife-compiler:${butterKnife}",
+            butterKnife                 : "com.jakewharton:butterknife:${butterKnife}",
+
+            okHttp                      : "com.squareup.okhttp3:okhttp:${okHttp}",
+            okHttpInterceptor           : "com.squareup.okhttp3:logging-interceptor:${okHttp}",
+
+            retrofit2                   : "com.squareup.retrofit2:retrofit:${retrofit2}",
+            retrofitRxAdapter           : "com.squareup.retrofit2:adapter-rxjava2:${retrofit2}",
+            retrofitConverter           : "com.squareup.retrofit2:converter-gson:${retrofit2}",
+
+            gson                        : "com.google.code.gson:gson:${gson}",
+
+            mosby3Mvi                   : "com.hannesdorfmann.mosby3:mvi:${mosby3}",
+
+            timber                      : "com.jakewharton.timber:timber:${timber}",
+
+            room                        : "android.arch.persistence.room:runtime:$archComponents",
+            roomRxJava                  : "android.arch.persistence.room:rxjava2:$archComponents",
+            roomCompiler                : "android.arch.persistence.room:compiler:$archComponents",
+
+            recyclerDivider             : "com.yqritc:recyclerview-flexibledivider:$recyclerDivider",
+
+            picasso                     : "com.squareup.picasso:picasso:$picasso"
+    ]
+
+    commonTestDependencies = [
+            junit                       : "junit:junit:${junit}",
+            assertj                     : "org.assertj:assertj-core:${assertJ}",
+            mockito                     : "org.mockito:mockito-core:${mockito}",
+            mockitoKotlin               : "com.nhaarman:mockito-kotlin:${mockitoKotlin}",
+    ]
+
+    developmentDependencies = [
+            leakcanary                  : "com.squareup.leakcanary:leakcanary-android:${leakCanary}",
+            leakcanaryNoOp              : "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanary}",
+
+            stetho                      : "com.facebook.stetho:stetho:${stetho}",
+            stethoOkHttp                : "com.facebook.stetho:stetho-okhttp3:${stetho}",
+
+            chuck                       : "com.readystatesoftware.chuck:library:${chuck}",
+            chuckNoOp                   : "com.readystatesoftware.chuck:library-no-op:${chuck}"
+    ]
+}

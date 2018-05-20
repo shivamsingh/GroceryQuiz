@@ -1,19 +1,26 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 27
+    def conf = rootProject.ext.android
+
+    compileSdkVersion conf.compileSdkVersion
+    buildToolsVersion conf.buildToolsVersion
+
     defaultConfig {
-        applicationId "com.shivamsingh.groceryquiz"
-        minSdkVersion 15
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        applicationId conf.applicationId
+        minSdkVersion conf.minSdkVersion
+        targetSdkVersion conf.targetSdkVersion
+        versionCode conf.versionCode
+        versionName conf.versionName
+        multiDexEnabled true
+
+        buildConfigField "String", "DATABASE_NAME", database_name
+        buildConfigField "int", "DATABASE_VERSION", database_version
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -23,10 +30,86 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    def commonDependencies = rootProject.ext.commonDependencies
+    def developmentDependencies = rootProject.ext.developmentDependencies
+    def commonTestDependencies = rootProject.ext.commonTestDependencies
+
+    implementation commonDependencies.kotlin
+    implementation commonDependencies.kotlinReflection
+
+    // Android
+    implementation commonDependencies.supportAppCompatV7
+    implementation commonDependencies.supportV13
+    implementation commonDependencies.supportAnnotation
+    implementation commonDependencies.supportCardView
+    implementation commonDependencies.supportRecyclerView
+    implementation commonDependencies.constraintLayout
+    implementation commonDependencies.supportDesign
+
+    // RxJava 2
+    implementation commonDependencies.rxJava2
+    implementation commonDependencies.rxAndroid
+
+    // Dagger 2
+    implementation commonDependencies.dagger2
+    kapt commonDependencies.dagger2Compiler
+    implementation commonDependencies.dagger2Android
+    kapt commonDependencies.dagger2AndroidCompiler
+    compileOnly commonDependencies.javaxAnnotation
+
+    // Architecture components
+    implementation commonDependencies.room
+    implementation commonDependencies.roomRxJava
+    kapt commonDependencies.roomCompiler
+
+    // ButterKnife
+    implementation commonDependencies.butterKnife
+    kapt commonDependencies.butterKnifeCompiler
+
+    // RxBinding
+    implementation commonDependencies.rxbinding
+
+    // Mosby Mvi
+    implementation commonDependencies.mosby3Mvi
+
+    // Networking
+    implementation commonDependencies.okHttp
+    implementation commonDependencies.okHttpInterceptor
+
+    // Networking Retrofit
+    implementation commonDependencies.retrofit2
+    implementation commonDependencies.retrofitRxAdapter
+    implementation commonDependencies.retrofitConverter
+
+    // Recycler Divider
+    implementation commonDependencies.recyclerDivider
+
+    // Recycler Divider
+    implementation commonDependencies.picasso
+
+    // Gson
+    implementation commonDependencies.gson
+
+    // Logging
+    implementation commonDependencies.timber
+
+    // Stetho
+    implementation developmentDependencies.stetho
+    implementation developmentDependencies.stethoOkHttp
+
+    // Leak Canary
+    debugImplementation developmentDependencies.leakcanary
+    releaseImplementation developmentDependencies.leakcanaryNoOp
+    testImplementation developmentDependencies.leakcanaryNoOp
+
+    // Chuck
+    debugImplementation developmentDependencies.chuck
+    releaseImplementation developmentDependencies.chuckNoOp
+    testImplementation developmentDependencies.chuckNoOp
+
+    // Unit testing
+    testImplementation commonTestDependencies.junit
+    testImplementation commonTestDependencies.assertj
+    testImplementation commonTestDependencies.mockito
+    testImplementation commonTestDependencies.mockitoKotlin
 }
