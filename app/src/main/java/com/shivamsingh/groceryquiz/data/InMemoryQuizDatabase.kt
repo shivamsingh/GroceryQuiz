@@ -18,6 +18,8 @@ class InMemoryQuizDatabase(val context: Context) : QuizDatabase {
     }
 
     private fun loadAllQuiz(): List<QuizModel> {
+        // Sleep thread to simulate heavy IO operation and to show Loading state.
+        Thread.sleep(3 * 1000)
         val quizesJson = context.assets.open("zquestions.json").bufferedReader().use { it.readText() }
         quizes = quizHashMap(quizesJson).map { toQuizModel(it) }.toList()
         return quizes as List<QuizModel>

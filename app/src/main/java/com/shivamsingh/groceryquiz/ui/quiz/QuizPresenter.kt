@@ -4,12 +4,11 @@ import com.hannesdorfmann.mosby3.mvi.MviBasePresenter
 import com.shivamsingh.groceryquiz.domain.QuizRepository
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 
 class QuizPresenter(val quizRepository: QuizRepository) : MviBasePresenter<QuizView, QuizViewModel>() {
-
     override fun bindIntents() {
         val submitQuiz = intent(QuizView::submitQuizIntent)
                 .flatMap(quizRepository::submit)
@@ -38,19 +37,26 @@ class QuizPresenter(val quizRepository: QuizRepository) : MviBasePresenter<QuizV
     }
 
     private fun activeQuizIntents(): ObservableSource<out PartialViewModelChange>? {
-        val activeQuiz = intent(QuizView::activeQuizIntent)
-                .flatMap { ignored -> quizRepository.active() }
-                .map { ActiveQuiz(it, quizRepository.activeQuizStartTime()) }
+        val activeAnseweredQuizIntent = PublishSubject.create<Boolean>()
+        val activeTimedOudQuizIntent = PublishSubject.create<Boolean>()
 
-        val activeAnsweredQuiz = intent(QuizView::activeQuizIntent)
+        val activeQuiz = intent(QuizView::activeQuizIntent)
+                .flatMap { ignored -> quizRepository.active().subscribeOn(Schedulers.io()) }
+                .map { ActiveQuiz(it, quizRepository.activeQuizStartTime()) }
+                .doOnComplete {
+                    activeAnseweredQuizIntent.onNext(true)
+                    activeTimedOudQuizIntent.onNext(true)
+                }
+
+        val activeAnsweredQuiz = intent { activeAnseweredQuizIntent }
                 .flatMap { ignored -> quizRepository.activeAnsweredOption() }
                 .map { AnswerSubmitted(it) }
 
-        val activeTimedOutQuiz = intent(QuizView::activeQuizIntent)
+        val activeTimedOutQuiz = intent { activeAnseweredQuizIntent }
                 .flatMap { ignored -> quizRepository.timedOutActiveQuiz() }
                 .map { TimedOut() }
 
-        return Observable.concat(activeQuiz, activeAnsweredQuiz, activeTimedOutQuiz)
+        return Observable.merge(activeQuiz, activeAnsweredQuiz, activeTimedOutQuiz)
     }
 
     private fun initialState() = QuizViewModel(QuizViewState.LOADING, null, null)

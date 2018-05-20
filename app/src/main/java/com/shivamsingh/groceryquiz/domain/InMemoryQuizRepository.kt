@@ -38,7 +38,7 @@ class InMemoryQuizRepository(val store: DictionaryStore, val quizDatabase: QuizD
     }
 
     private fun activeQuiz(): Observable<QuizModel> {
-        if (activeQuiz != null) Observable.just(activeQuiz)
+        if (activeQuiz != null) return Observable.just(activeQuiz)
         return quizDatabase.allQuiz()
                 .flatMap { Observable.fromIterable(it) }
                 .filter { it.question == storedActiveQuizQuestion() }
