@@ -11,7 +11,7 @@ import java.util.*
 import javax.inject.Inject
 
 @PerApplication
-class InMemoryQuizDatabase @Inject constructor(@ForApplication val context: Context) : QuizDatabase {
+class InMemoryQuizRepository @Inject constructor(@ForApplication val context: Context) : QuizRepository {
 
     private var quizes: List<QuizModel>? = null
 

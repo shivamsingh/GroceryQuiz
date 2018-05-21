@@ -4,7 +4,7 @@ import com.shivamsingh.groceryquiz.ui.entity.AnsweredOption
 import com.shivamsingh.groceryquiz.ui.entity.Quiz
 import io.reactivex.Observable
 
-interface QuizRepository {
+interface IQuizInteractor {
 
     fun active(): Observable<Quiz>
 

@@ -1,6 +1,6 @@
 package com.shivamsingh.groceryquiz.domain
 
-import com.shivamsingh.groceryquiz.data.QuizDatabase
+import com.shivamsingh.groceryquiz.data.QuizRepository
 import com.shivamsingh.groceryquiz.data.disc.DictionaryStore
 import com.shivamsingh.groceryquiz.domain.entity.QuizModel
 import com.shivamsingh.groceryquiz.ui.entity.AnsweredOption
@@ -9,7 +9,7 @@ import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
 
-class InMemoryQuizRepository @Inject constructor(val store: DictionaryStore, val quizDatabase: QuizDatabase) : QuizRepository {
+class QuizInteractor @Inject constructor(val store: DictionaryStore, val quizRepository: QuizRepository) : IQuizInteractor {
     private var activeQuiz: QuizModel? = null
 
     override fun active(): Observable<Quiz> {
@@ -21,7 +21,7 @@ class InMemoryQuizRepository @Inject constructor(val store: DictionaryStore, val
 
     private fun activeQuiz(): Observable<QuizModel> {
         if (activeQuiz != null) return Observable.just(activeQuiz)
-        return quizDatabase.allQuiz()
+        return quizRepository.allQuiz()
                 .flatMap { Observable.fromIterable(it) }
                 .filter { it.question == storedActiveQuizQuestion() }
                 .doOnNext { activeQuiz = it }
@@ -34,7 +34,7 @@ class InMemoryQuizRepository @Inject constructor(val store: DictionaryStore, val
     }
 
     override fun next(): Observable<Quiz> {
-        return quizDatabase.allQuiz()
+        return quizRepository.allQuiz()
                 .flatMap { Observable.just(it.toMutableList().shuffled().first()) }
                 .doOnNext { storeAsActive(it) }
                 .map { toShuffledOptions(it) }
