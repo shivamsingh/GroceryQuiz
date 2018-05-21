@@ -37,7 +37,7 @@ class QuizInteractor @Inject constructor(val store: DictionaryStore, val quizRep
 
     override fun next(): Observable<Quiz> {
         return quizRepository.allQuiz()
-                .flatMap { Observable.just(it.toMutableList().shuffled().first()) }
+                .flatMap { Observable.just(it.toMutableList().random()) }
                 .doOnNext { storeAsActive(it) }
                 .map { toShuffledOptions(it) }
                 .map { toQuiz(it) }
@@ -97,3 +97,5 @@ class QuizInteractor @Inject constructor(val store: DictionaryStore, val quizRep
 
     private fun toAnsweredOption(answer: String) = AnsweredOption(answer, activeQuiz!!.correctOption.option == answer)
 }
+
+fun <E> List<E>.random(): E = get(Random().nextInt(size))
