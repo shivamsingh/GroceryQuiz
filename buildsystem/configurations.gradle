@@ -1,0 +1,21 @@
+ext {
+    android = [
+            applicationId           : "com.shivamsingh.groceryquiz",
+            versionCode             : 1,
+            versionName             : "1.0.0",
+            buildToolsVersion       : "27.0.3",
+            minSdkVersion           : 21,
+            targetSdkVersion        : 27,
+            compileSdkVersion       : 27
+    ]
+
+    endpoints = [
+            staging_endpoint_url    = "\"http://github.com/shivamsingh/\"",
+            live_endpoint_url       = "\"http://github.com/shivamsingh/\"",
+    ]
+
+    persistence = [
+            database_name           = "\"grocery_quiz\"",
+            database_version        = "1"
+    ]
+}

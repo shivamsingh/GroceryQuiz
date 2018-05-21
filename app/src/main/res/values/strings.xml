@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Grocery Quiz</string>
+    <string name="loading_quiz">Loading Quiz...</string>
+    <string name="correct_answer">Correct Answer</string>
+    <string name="incorrect_answer">Incorrect Answer</string>
+    <string name="timed_out">Timed Out</string>
+    <string name="submit">Submit</string>
+    <string name="next_quiz">Next Quiz</string>
+    <string name="retake_quiz">Retake Quiz</string>
 </resources>
