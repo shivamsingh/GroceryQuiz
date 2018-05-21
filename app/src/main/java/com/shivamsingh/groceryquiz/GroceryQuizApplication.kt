@@ -34,12 +34,12 @@ class GroceryQuizApplication : Application(), HasActivityInjector {
     private fun configure() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-            StrictMode.enableDefaults()
-            Stetho.initializeWithDefaults(this)
-            if (LeakCanary.isInAnalyzerProcess(this)) {
-                return
-            }
-            LeakCanary.install(this)
+//            StrictMode.enableDefaults()
+//            Stetho.initializeWithDefaults(this)
+//            if (LeakCanary.isInAnalyzerProcess(this)) {
+//                return
+//            }
+//            LeakCanary.install(this)
         } else
             Timber.plant(ErrorReportingTree())
     }

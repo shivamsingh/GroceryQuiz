@@ -19,25 +19,6 @@ class InMemoryQuizRepository @Inject constructor(val store: DictionaryStore, val
                 .switchIfEmpty(next())
     }
 
-    override fun activeQuizStartTime(): Long {
-        return activeQuiz()
-                .map { store.retrieveLong(ACTIVE_QUIZ_KEY_START_TIME) }
-                .blockingFirst()
-    }
-
-    override fun activeAnsweredOption(): Observable<AnsweredOption> {
-        return activeQuiz()
-                .filter { it.question == store.retrieveValue(LAST_ANSWERED_QUIZ_KEY) }
-                .map { toAnsweredOption(store.retrieveValue(LAST_ANSWERED_QUIZ_OPTION)) }
-    }
-
-    override fun timedOutActiveQuiz(): Observable<Boolean> {
-        return activeQuiz()
-                .filter { it.question != store.retrieveValue(LAST_ANSWERED_QUIZ_KEY) }
-                .filter { isActiveQuizTimedOut(it) }
-                .map { true }
-    }
-
     private fun activeQuiz(): Observable<QuizModel> {
         if (activeQuiz != null) return Observable.just(activeQuiz)
         return quizDatabase.allQuiz()
@@ -62,9 +43,25 @@ class InMemoryQuizRepository @Inject constructor(val store: DictionaryStore, val
 
     override fun retake(): Observable<Quiz> {
         return Observable.just(activeQuiz)
+                .doOnNext { clearLastAnswered() }
                 .doOnNext { storeAsActive(it!!) }
                 .map { toShuffledOptions(it) }
                 .map { toQuiz(it) }
+    }
+
+    override fun activeQuizStartTime() = store.retrieveLong(ACTIVE_QUIZ_KEY_START_TIME)
+
+    override fun activeAnsweredOption(): Observable<AnsweredOption> {
+        return activeQuiz()
+                .filter { it.question == store.retrieveValue(LAST_ANSWERED_QUIZ_KEY) }
+                .map { toAnsweredOption(store.retrieveValue(LAST_ANSWERED_QUIZ_OPTION)) }
+    }
+
+    override fun timedOutActiveQuiz(): Observable<Boolean> {
+        return activeQuiz()
+                .filter { it.question != store.retrieveValue(LAST_ANSWERED_QUIZ_KEY) }
+                .filter { isActiveQuizTimedOut(it) }
+                .map { true }
     }
 
     private fun storedActiveQuizQuestion() = store.retrieveValue(ACTIVE_QUIZ_KEY)
@@ -79,6 +76,12 @@ class InMemoryQuizRepository @Inject constructor(val store: DictionaryStore, val
         store.storeValue(LAST_ANSWERED_QUIZ_KEY, activeQuiz!!.question)
         store.storeValue(LAST_ANSWERED_QUIZ_OPTION, answeredOption.option)
         store.storeValue(IS_LAST_ANSWERED_QUIZ_OPTION_CORRECT, answeredOption.isCorrect)
+    }
+
+    private fun clearLastAnswered() {
+        store.storeValue(LAST_ANSWERED_QUIZ_KEY, "")
+        store.storeValue(LAST_ANSWERED_QUIZ_OPTION, "")
+        store.storeValue(IS_LAST_ANSWERED_QUIZ_OPTION_CORRECT, "")
     }
 
     private fun isActiveQuizTimedOut(it: QuizModel) =

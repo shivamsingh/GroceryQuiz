@@ -7,6 +7,7 @@ import io.reactivex.ObservableSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.SingleSubject
 import javax.inject.Inject
 
 class QuizPresenter @Inject constructor(val quizRepository: QuizRepository) : MviBasePresenter<QuizView, QuizViewModel>() {
@@ -38,22 +39,22 @@ class QuizPresenter @Inject constructor(val quizRepository: QuizRepository) : Mv
     }
 
     private fun activeQuizIntents(): ObservableSource<out PartialViewModelChange>? {
-        val activeAnseweredQuizIntent = PublishSubject.create<Boolean>()
-        val activeTimedOudQuizIntent = PublishSubject.create<Boolean>()
+        val activeAnseweredQuizIntent = SingleSubject.create<Boolean>()
+        val activeTimedOudQuizIntent = SingleSubject.create<Boolean>()
 
         val activeQuiz = intent(QuizView::activeQuizIntent)
                 .flatMap { ignored -> quizRepository.active().subscribeOn(Schedulers.io()) }
                 .map { ActiveQuiz(it, quizRepository.activeQuizStartTime()) }
                 .doOnComplete {
-                    activeAnseweredQuizIntent.onNext(true)
-                    activeTimedOudQuizIntent.onNext(true)
+                    activeAnseweredQuizIntent.onSuccess(true)
+                    activeTimedOudQuizIntent.onSuccess(true)
                 }
 
-        val activeAnsweredQuiz = intent { activeAnseweredQuizIntent }
+        val activeAnsweredQuiz = intent { activeAnseweredQuizIntent.toObservable() }
                 .flatMap { ignored -> quizRepository.activeAnsweredOption() }
                 .map { AnswerSubmitted(it) }
 
-        val activeTimedOutQuiz = intent { activeAnseweredQuizIntent }
+        val activeTimedOutQuiz = intent { activeTimedOudQuizIntent.toObservable() }
                 .flatMap { ignored -> quizRepository.timedOutActiveQuiz() }
                 .map { TimedOut() }
 

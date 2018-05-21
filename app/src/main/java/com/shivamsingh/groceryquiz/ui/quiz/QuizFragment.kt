@@ -17,6 +17,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -86,7 +87,7 @@ class QuizFragment @Inject constructor() : BaseFragment<QuizView, QuizPresenter>
     override fun timedOutQuizIntent() = timedOutSubject
 
     override fun render(viewModel: QuizViewModel) {
-        Log.d("QZ", "render: " + viewModel)
+        Timber.i("render: $viewModel")
         when (viewModel.state) {
             QuizViewState.LOADING -> showQuizLoading()
             QuizViewState.ACTIVE -> showQuizState(viewModel)
