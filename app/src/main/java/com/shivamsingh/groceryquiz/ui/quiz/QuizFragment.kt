@@ -27,7 +27,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class QuizFragment @Inject constructor(): BaseFragment<QuizView, QuizPresenter>(), QuizView {
+class QuizFragment @Inject constructor() : BaseFragment<QuizView, QuizPresenter>(), QuizView {
     @BindView(R.id.question)
     lateinit var question: TextView
     @BindView(R.id.option1)
@@ -76,10 +76,7 @@ class QuizFragment @Inject constructor(): BaseFragment<QuizView, QuizPresenter>(
         throw IllegalStateException("Invalid view provided")
     }
 
-    override fun createPresenter() = QuizPresenter(quizRepository())
-
-    private fun quizRepository() =
-            InMemoryQuizRepository(SharedPreferencesStore(context), InMemoryQuizDatabase(context))
+    override fun createPresenter() = quizPresenter
 
     override fun activeQuizIntent() = Observable.just(true)
 

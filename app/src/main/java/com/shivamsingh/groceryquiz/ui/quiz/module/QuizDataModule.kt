@@ -1,4 +1,4 @@
-package com.shivamsingh.groceryquiz.ui.quiz.di_module
+package com.shivamsingh.groceryquiz.ui.quiz.module
 
 import com.aasaanjobs.partnerinternal.di.scopes.PerActivity
 import com.shivamsingh.groceryquiz.data.InMemoryQuizDatabase

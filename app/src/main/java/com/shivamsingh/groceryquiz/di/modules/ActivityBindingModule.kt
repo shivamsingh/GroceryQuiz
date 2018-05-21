@@ -2,8 +2,8 @@ package com.shivamsingh.groceryquiz.di.modules
 
 import com.aasaanjobs.partnerinternal.di.scopes.PerActivity
 import com.shivamsingh.groceryquiz.ui.MainActivity
-import com.shivamsingh.groceryquiz.ui.quiz.di_module.QuizDataModule
-import com.shivamsingh.groceryquiz.ui.quiz.di_module.QuizModule
+import com.shivamsingh.groceryquiz.ui.quiz.module.QuizDataModule
+import com.shivamsingh.groceryquiz.ui.quiz.module.QuizModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
