@@ -1,13 +1,17 @@
 package com.shivamsingh.groceryquiz.data
 
 import android.content.Context
+import com.aasaanjobs.partnerinternal.di.qualifiers.ForApplication
+import com.aasaanjobs.partnerinternal.di.scopes.PerApplication
 import com.google.gson.GsonBuilder
 import com.shivamsingh.groceryquiz.domain.entity.QuizModel
 import com.shivamsingh.groceryquiz.domain.entity.QuizOptionModel
 import io.reactivex.Observable
 import java.util.*
+import javax.inject.Inject
 
-class InMemoryQuizDatabase(val context: Context) : QuizDatabase {
+@PerApplication
+class InMemoryQuizDatabase @Inject constructor(@ForApplication val context: Context) : QuizDatabase {
 
     private var quizes: List<QuizModel>? = null
 
