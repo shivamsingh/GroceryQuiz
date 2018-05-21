@@ -1,7 +1,6 @@
 package com.shivamsingh.groceryquiz.ui.quiz
 
 import android.graphics.Color
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -10,19 +9,14 @@ import butterknife.BindView
 import butterknife.OnClick
 import com.jakewharton.rxbinding2.view.RxView
 import com.shivamsingh.groceryquiz.R
-import com.shivamsingh.groceryquiz.data.InMemoryQuizDatabase
-import com.shivamsingh.groceryquiz.domain.InMemoryQuizRepository
-import com.shivamsingh.groceryquiz.data.disc.SharedPreferencesStore
 import com.shivamsingh.groceryquiz.ui.base.BaseFragment
 import com.shivamsingh.groceryquiz.ui.entity.AnsweredOption
 import com.shivamsingh.groceryquiz.ui.entity.Quiz
-import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
-import okhttp3.OkHttpClient
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -213,9 +207,5 @@ class QuizFragment @Inject constructor() : BaseFragment<QuizView, QuizPresenter>
     private fun showRemainingTime(it: Long) {
         if (isAdded)
             message.text = it.toString()
-    }
-
-    companion object {
-        fun instance() = QuizFragment()
     }
 }

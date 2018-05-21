@@ -62,6 +62,7 @@ class InMemoryQuizRepository @Inject constructor(val store: DictionaryStore, val
 
     override fun retake(): Observable<Quiz> {
         return Observable.just(activeQuiz)
+                .doOnNext { storeAsActive(it!!) }
                 .map { toShuffledOptions(it) }
                 .map { toQuiz(it) }
     }
