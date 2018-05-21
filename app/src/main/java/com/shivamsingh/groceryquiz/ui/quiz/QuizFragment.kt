@@ -33,6 +33,8 @@ class QuizFragment @Inject constructor() : BaseFragment<QuizView, QuizPresenter>
     lateinit var option3: ImageView
     @BindView(R.id.option4)
     lateinit var option4: ImageView
+    @BindView(R.id.options)
+    lateinit var options: View
     @BindView(R.id.submit)
     lateinit var submit: View
     @BindView(R.id.next)
@@ -97,10 +99,11 @@ class QuizFragment @Inject constructor() : BaseFragment<QuizView, QuizPresenter>
     }
 
     private fun showQuizLoading() {
+        options.visibility = View.INVISIBLE
         submit.visibility = View.INVISIBLE
         next.visibility = View.INVISIBLE
         retake.visibility = View.INVISIBLE
-        message.text = "Loading Quiz..."
+        message.text = getString(R.string.loading_quiz)
         message.setTextColor(resources.getColor(R.color.success))
     }
 
@@ -114,6 +117,7 @@ class QuizFragment @Inject constructor() : BaseFragment<QuizView, QuizPresenter>
         picasso.load(viewModel.quiz.option4).into(option4)
 
         clearOptionsSelection()
+        options.visibility = View.VISIBLE
         submit.visibility = View.VISIBLE
         next.visibility = View.INVISIBLE
         retake.visibility = View.INVISIBLE
@@ -144,19 +148,18 @@ class QuizFragment @Inject constructor() : BaseFragment<QuizView, QuizPresenter>
         submit.visibility = View.GONE
         next.visibility = View.VISIBLE
         retake.visibility = View.VISIBLE
-        message.text = "Timed Out"
+        message.text = getString(R.string.timed_out)
         message.setTextColor(resources.getColor(R.color.error))
     }
 
-    private fun showMessage(isCorrect: Boolean) {
-        if (isCorrect) {
-            message.text = "Correct Answer"
-            message.setTextColor(resources.getColor(R.color.success))
-        } else {
-            message.text = "Incorrect Answer"
-            message.setTextColor(resources.getColor(R.color.error))
-        }
-    }
+    private fun showMessage(isCorrect: Boolean) =
+            if (isCorrect) {
+                message.text = getString(R.string.correct_answer)
+                message.setTextColor(resources.getColor(R.color.success))
+            } else {
+                message.text = getString(R.string.incorrect_answer)
+                message.setTextColor(resources.getColor(R.color.error))
+            }
 
     private fun selectOption(optionToSelect: View) {
         clearOptionsSelection()
