@@ -7,8 +7,9 @@ import io.reactivex.ObservableSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import javax.inject.Inject
 
-class QuizPresenter(val quizRepository: QuizRepository) : MviBasePresenter<QuizView, QuizViewModel>() {
+class QuizPresenter @Inject constructor(val quizRepository: QuizRepository) : MviBasePresenter<QuizView, QuizViewModel>() {
     override fun bindIntents() {
         val submitQuiz = intent(QuizView::submitQuizIntent)
                 .flatMap(quizRepository::submit)

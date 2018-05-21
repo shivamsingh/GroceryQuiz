@@ -25,8 +25,9 @@ import io.reactivex.subjects.PublishSubject
 import okhttp3.OkHttpClient
 import java.util.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class QuizFragment : BaseFragment<QuizView, QuizPresenter>(), QuizView {
+class QuizFragment @Inject constructor() : BaseFragment<QuizView, QuizPresenter>(), QuizView {
     @BindView(R.id.question)
     lateinit var question: TextView
     @BindView(R.id.option1)
@@ -51,18 +52,12 @@ class QuizFragment : BaseFragment<QuizView, QuizPresenter>(), QuizView {
     private var timeoutSubscription: Disposable? = null
     private val timedOutSubject = PublishSubject.create<Boolean>()
 
+    @Inject
     lateinit var picasso: Picasso
-//    lateinit var quizPresenter: QuizPresenter
+    @Inject
+    lateinit var quizPresenter: QuizPresenter
 
     override fun layoutRes() = R.layout.quiz_fragment
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        picasso = Picasso.Builder(context)
-                .downloader(OkHttp3Downloader(OkHttpClient.Builder().build()))
-                .build()
-//        quizPresenter = QuizPresenter(quizRepository())
-    }
 
     @OnClick(R.id.option1, R.id.option2, R.id.option3, R.id.option4)
     fun onClick(view: View) {
@@ -81,10 +76,7 @@ class QuizFragment : BaseFragment<QuizView, QuizPresenter>(), QuizView {
         throw IllegalStateException("Invalid view provided")
     }
 
-    override fun createPresenter() = QuizPresenter(quizRepository())
-
-    private fun quizRepository() =
-            InMemoryQuizRepository(SharedPreferencesStore(context), InMemoryQuizDatabase(context))
+    override fun createPresenter() = quizPresenter
 
     override fun activeQuizIntent() = Observable.just(true)
 

@@ -2,9 +2,13 @@ package com.shivamsingh.groceryquiz.data.disc
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.aasaanjobs.partnerinternal.di.qualifiers.ForApplication
+import com.aasaanjobs.partnerinternal.di.scopes.PerApplication
 import com.shivamsingh.groceryquiz.domain.SHARED_PREF_NAME
+import javax.inject.Inject
 
-class SharedPreferencesStore constructor(val context: Context) : DictionaryStore {
+@PerApplication
+class SharedPreferencesStore @Inject constructor(@ForApplication val context: Context) : DictionaryStore {
     val preferences: SharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
 
     override fun storeValue(key: String, value: Boolean) {

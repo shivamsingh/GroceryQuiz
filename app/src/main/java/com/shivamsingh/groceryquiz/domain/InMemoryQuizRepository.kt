@@ -7,8 +7,9 @@ import com.shivamsingh.groceryquiz.ui.entity.AnsweredOption
 import com.shivamsingh.groceryquiz.ui.entity.Quiz
 import io.reactivex.Observable
 import java.util.*
+import javax.inject.Inject
 
-class InMemoryQuizRepository(val store: DictionaryStore, val quizDatabase: QuizDatabase) : QuizRepository {
+class InMemoryQuizRepository @Inject constructor(val store: DictionaryStore, val quizDatabase: QuizDatabase) : QuizRepository {
     private var activeQuiz: QuizModel? = null
 
     override fun active(): Observable<Quiz> {
