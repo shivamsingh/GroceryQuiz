@@ -42,7 +42,7 @@ class QuizPresenter @Inject constructor(val quizInteractor: IQuizInteractor) : M
         val activeTimedOudQuizIntent = SingleSubject.create<Boolean>()
 
         val activeQuiz = intent(QuizView::activeQuizIntent)
-                .flatMap { ignored -> quizInteractor.active().subscribeOn(Schedulers.io()) }
+                .flatMap { ignored -> quizInteractor.active() }
                 .map { ActiveQuiz(it, quizInteractor.activeQuizStartTime()) }
                 .doOnComplete {
                     activeAnseweredQuizIntent.onSuccess(true)

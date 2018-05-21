@@ -6,6 +6,7 @@ import com.shivamsingh.groceryquiz.domain.entity.QuizModel
 import com.shivamsingh.groceryquiz.ui.entity.AnsweredOption
 import com.shivamsingh.groceryquiz.ui.entity.Quiz
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
 
@@ -25,6 +26,7 @@ class QuizInteractor @Inject constructor(val store: DictionaryStore, val quizRep
                 .flatMap { Observable.fromIterable(it) }
                 .filter { it.question == storedActiveQuizQuestion() }
                 .doOnNext { activeQuiz = it }
+                .subscribeOn(Schedulers.io())
     }
 
     override fun submit(answer: String): Observable<AnsweredOption> {
